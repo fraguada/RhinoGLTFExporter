@@ -5,11 +5,11 @@ using Rhino.Commands;
 using Rhino.Input;
 using Rhino.Input.Custom;
 
-namespace webIO
+namespace WebIO
 {
-    public class webIOCommand : Command
+    public class WebIOCommand : Command
     {
-        public webIOCommand()
+        public WebIOCommand()
         {
             // Rhino only creates one instance of each command class defined in a
             // plug-in, so it is safe to store a refence in a static property.
@@ -17,7 +17,7 @@ namespace webIO
         }
 
         ///<summary>The only instance of this command.</summary>
-        public static webIOCommand Instance
+        public static WebIOCommand Instance
         {
             get; private set;
         }
