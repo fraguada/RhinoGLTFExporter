@@ -56,21 +56,7 @@ namespace WebIO
         /// <returns>A value that defines success or a specific failure.</returns>
         protected override Rhino.PlugIns.WriteFileResult WriteFile(string filename, int index, RhinoDoc doc, Rhino.FileIO.FileWriteOptions options)
         {
-            // export .3dm
-            // Start Node with that .3dm filename
-            // parse the command line arguments
-            // read the .3dm
-            // convert to three.js objects
-            // export the objects as gltf
-            // save with same 3dm file name
-            // when file is written, return to .net
 
-            //var methods = new WebIO.Lib.RhinoMethods();
-
-            // Start();
-
-            //var result = methods.RunNode();
-            // Profit
             ext = Path.GetExtension(filename);
             var originalDir = Path.GetDirectoryName(filename);
             var file = Path.GetFileName(filename);
@@ -99,42 +85,41 @@ namespace WebIO
             {
                 if ((options.WriteSelectedObjectsOnly && rhinoObject.IsSelected(true) == 1) || (!options.WriteSelectedObjectsOnly) || (rhinoObject.IsSelected(true) == 2))
                 {
+                    
+                    file3dm.Materials.Add(doc.Materials[rhinoObject.Attributes.MaterialIndex]);
+                    var matId = file3dm.Materials.Count - 1;
+                    var att = rhinoObject.Attributes;
+                    att.MaterialIndex = matId;
+
                     switch (rhinoObject.ObjectType)
                     {
                         case ObjectType.Mesh:
-                            file3dm.Objects.AddMesh(rhinoObject.Geometry as Rhino.Geometry.Mesh);
+                            file3dm.Objects.AddMesh(rhinoObject.Geometry as Rhino.Geometry.Mesh, att);
                             break;
 
                         case ObjectType.Brep:
                         case ObjectType.Extrusion:
                         case ObjectType.Surface:
+                        case ObjectType.SubD:
                             var meshes = rhinoObject.GetMeshes(Rhino.Geometry.MeshType.Default);
-                            foreach (var mesh in meshes)
-                                file3dm.Objects.AddMesh(mesh);
+                            var mesh = new Rhino.Geometry.Mesh();
+                            foreach (var m in meshes)
+                                mesh.Append(m);
+
+                            file3dm.Objects.AddMesh(mesh, att);
                             break;
                     }
+
+                    
                 }
             }
 
+
+
             var result = file3dm.Write(tmpName, 0);
 
-             RunNode(tmpName);
-            //LaunchProcess(tmpName);
-
-           // var res = Task.Run(() => RunNode(tmpName));
-
-            /*
-            while (!fileWritten)
-            {
-                Debug.WriteLine("Waiting", "WebIO");
-            }
-
-            
-            while (!File.Exists(tmpName + ".glTF"))
-            {
-                Debug.WriteLine("Waiting");
-            }
-            */
+            //RunNode(tmpName);
+            LaunchProcess(tmpName);
 
             while (tmpFileName == null) { }
 
@@ -173,7 +158,6 @@ namespace WebIO
             if (ext == Path.GetExtension(e.FullPath))
             {
                 tmpFileName = e.FullPath;
-                tcs?.TrySetResult(true);
             }
             
         }
@@ -226,6 +210,9 @@ namespace WebIO
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardError = true;
             process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.WorkingDirectory = "../../../WebIOApp/";
+            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            process.StartInfo.CreateNoWindow = true;
 
             process.Start();
             process.BeginErrorReadLine();

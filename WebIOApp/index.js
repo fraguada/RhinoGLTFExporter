@@ -1,27 +1,29 @@
-//var edge = require('edge-js');
 const fs = require('fs')
 const rhino3dm = require('rhino3dm')
 const THREE = require('three')
 
+// ---------------------
 // https://gist.github.com/donmccurdy/9f094575c1f1a48a2ddda513898f6496
 // needed to support THREE.GLTFExporter
 const { Blob, FileReader } = require('vblob')
-
-// Patch global scope to imitate browser environment.
-
 global.THREE = THREE
 global.Blob = Blob
 global.FileReader = FileReader;
 
 require('three/examples/js/exporters/GLTFExporter')
+// ---------------------
 
-let file3dmpath = ""
+let file3dmpath = null
+let ext = null
 let scene = new THREE.Scene()
 const exporter = new THREE.GLTFExporter()
 
 process.argv.forEach(function (val, index, array) {
     if (index === 2) {
         file3dmpath = val
+    }
+    if (index === 3){
+        ext = val
     }
 })
 
@@ -32,13 +34,20 @@ rhino3dm().then((rhino)=>{
     let buffer = fs.readFileSync(file3dmpath)
     let arr = new Uint8Array(buffer)
     let file3dm = rhino.File3dm.fromByteArray(arr)
-    let objects = file3dm.objects();
+    let objects = file3dm.objects()
+    let materials = file3dm.materials
 
     for(var i=0; i<objects.count; i++) {
-        let geometry = objects.get(i).geometry()
+
+        let obj = objects.get(i)
+        let geometry = obj.geometry()
+        //let material = materials[obj.attributes.materialIndex]
         console.log(geometry)
 
-        let m = meshToThreejs(geometry, new THREE.MeshBasicMaterial())
+        let mat = new THREE.MeshPhysicalMaterial()
+        //mat.color = material.diffuseColor
+
+        let m = meshToThreejs(geometry, mat)
         scene.add(m)
 
       }
@@ -94,26 +103,3 @@ function meshToThreejs(mesh, material) {
     return new THREE.Mesh( geometry, material );
   }
 
-
-  /*
-
-var namespace = 'WebIO';
-var baseAppPath = '../' + namespace + '/bin/Debug/';
-var baseDll = baseAppPath + namespace + '.Lib.dll';
-
-var rhinoTypeName = namespace + '.Lib' + '.RhinoMethods';
-
-//define functions
-var nodeReady = edge.func({
-    assemblyFile: baseDll,
-    typeName: rhinoTypeName,
-    methodName: 'NodeReady'
-});
-
-// Call functions
-nodeReady('from node: ready', function (error, result) {
-    if (error) throw error;
-    console.log(result);
-});
-
-*/
