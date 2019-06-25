@@ -52,7 +52,8 @@
     <EmbeddedResource Include="EmbeddedResources\plugin-export.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="index.js">
+    <Content Include="..\App\dist\index.js">
+      <Link>index.js</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
