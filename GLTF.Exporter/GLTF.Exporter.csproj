@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3F39AA71-62B4-494F-A28C-90B35CE7A078}</ProjectGuid>
+    <ProjectGuid>{7F76F2AB-D1A0-4701-97F9-BC1BBC95FC54}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WebIO</RootNamespace>
-    <AssemblyName>WebIO</AssemblyName>
+    <RootNamespace>GLTF.Exporter</RootNamespace>
+    <AssemblyName>GLTF.Exporter</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -44,11 +44,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="WebIOPlugIn.cs" />
+    <Compile Include="GLTFExporterMethods.cs" />
+    <Compile Include="GLTFExporterPlugIn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EmbeddedResources\plugin-export.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="index.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -70,6 +76,5 @@ Erase "$(TargetPath)"</PostBuildEvent>
     <StartArguments>
     </StartArguments>
     <StartAction>Program</StartAction>
-    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 </Project>

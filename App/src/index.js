@@ -7,56 +7,77 @@ const THREE = require('three')
 // needed to support THREE.GLTFExporter
 const { Blob, FileReader } = require('vblob')
 global.THREE = THREE
-global.Blob = Blob
-global.FileReader = FileReader;
-
 require('three/examples/js/exporters/GLTFExporter')
 // ---------------------
 
-let file3dmpath = null
+let filepath = null
 let ext = null
 let scene = new THREE.Scene()
 const exporter = new THREE.GLTFExporter()
 
+// Parse arguments
 process.argv.forEach(function (val, index, array) {
+  console.log(val)
     if (index === 2) {
-        file3dmpath = val
+      filepath = val
     }
     if (index === 3){
         ext = val
     }
 })
 
+// handle no ext arg
+if (ext === null) {
+  // get extension from filepath
+  ext = filepath.substring(filepath.lastIndexOf('.'))
+  console.log(ext)
+}
+
 rhino3dm().then((rhino)=>{
 
-    global.window = global
+  // patch global
+  global.window = global
+  global.Blob = Blob // working
+  global.FileReader = FileReader
+    
+  if(ext === '.3dm'){
 
-    let buffer = fs.readFileSync(file3dmpath)
+    //read 3dm file from disk
+    let buffer = fs.readFileSync(filepath)
     let arr = new Uint8Array(buffer)
     let file3dm = rhino.File3dm.fromByteArray(arr)
+
     let objects = file3dm.objects()
-    let materials = file3dm.materials
+
+    //2019.06.25 - File3dm.Materials not supported yet on rhino3dm.js
+    
+    //let materials = file3dm.materials
+    //console.log(materials)
 
     for(var i=0; i<objects.count; i++) {
 
-        let obj = objects.get(i)
-        let geometry = obj.geometry()
-        //let material = materials[obj.attributes.materialIndex]
-        console.log(geometry)
+      let obj = objects.get(i)
+      let geometry = obj.geometry()
+      console.log(geometry)
 
-        let mat = new THREE.MeshPhysicalMaterial()
-        //mat.color = material.diffuseColor
+      //let material = materials[obj.attributes.materialIndex]
+     // console.log(material)
 
-        let m = meshToThreejs(geometry, mat)
-        scene.add(m)
+      let mat = new THREE.MeshPhysicalMaterial()
 
-      }
+      //mat.color = material.diffuseColor
+
+      let m = meshToThreejs(geometry, mat)
+      scene.add(m)
+
+    }
 
     exporter.parse( scene, function ( result ) {
 
-        WriteFile(JSON.stringify( result, null, 2 ), file3dmpath)
+      WriteFile(JSON.stringify( result, null, 2 ), filepath)
 
     })
+  } 
 
 })
 

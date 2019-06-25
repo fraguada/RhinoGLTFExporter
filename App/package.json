@@ -1,0 +1,26 @@
+{
+  "name": "RhinoGLTFExporterApp",
+  "version": "0.0.1",
+  "description": "Node.js code to harvest Three.js GLTFExporter Code",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "node index.js",
+    "build": "rollup -c"
+  },
+  "keywords": [
+    "glTF"
+  ],
+  "author": "Luis E. Fraguada",
+  "license": "MIT",
+  "dependencies": {
+    "rhino3dm": "^0.1.9",
+    "three": "^0.104.0",
+    "vblob": "^1.0.2"
+  },
+  "devDependencies": {
+    "rollup-plugin-commonjs": "^10.0.0",
+    "rollup-plugin-node-resolve": "^5.1.0"
+  },
+  "bundledDependencies": ["rhino3dm", "three", "vblob"]
+}

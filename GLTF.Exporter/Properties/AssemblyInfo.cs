@@ -16,19 +16,19 @@ using Rhino.PlugIns;
 
 // Icons should be Windows .ico files and contain 32-bit images in the following sizes: 16, 24, 32, 48, and 256.
 // This is a Rhino 6-only description.
-[assembly: PlugInDescription(DescriptionType.Icon, "webIO.EmbeddedResources.plugin-export.ico")]
+[assembly: PlugInDescription(DescriptionType.Icon, "GLTF.Exporter.EmbeddedResources.plugin-export.ico")]
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("webIO")]
+[assembly: AssemblyTitle("GLTF.Exporter")]
 
 // This will be used also for the plug-in description.
-[assembly: AssemblyDescription("webIO export plug-in")]
+[assembly: AssemblyDescription("GLTF.Exporter export plug-in")]
 
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("webIO")]
+[assembly: AssemblyProduct("GLTF.Exporter")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -39,7 +39,7 @@ using Rhino.PlugIns;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("3f39aa71-62b4-494f-a28c-90b35ce7a078")] // This will also be the Guid of the Rhino plug-in
+[assembly: Guid("7f76f2ab-d1a0-4701-97f9-bc1bbc95fc54")] // This will also be the Guid of the Rhino plug-in
 
 // Version information for an assembly consists of the following four values:
 //
